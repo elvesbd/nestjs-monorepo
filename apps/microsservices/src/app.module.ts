@@ -1,39 +1,12 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
   imports: [
-    /* ClientsModule.register([
-      {
-        name: 'ANIMALS_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: [
-            'amqps://bliusjly:ENcnqlBpupcKWGyas1YwhbdATaVnZz1g@hornet.rmq.cloudamqp.com/bliusjly',
-          ],
-          queue: 'mailbox',
-          queueOptions: {
-            durable: false,
-          },
-        },
-      },
-      {
-        name: 'COUNTRIES_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: [
-            'amqps://bliusjly:ENcnqlBpupcKWGyas1YwhbdATaVnZz1g@hornet.rmq.cloudamqp.com/bliusjly',
-          ],
-          queue: 'mailbox',
-          queueOptions: {
-            durable: false,
-          },
-        },
-      },
-    ]), */
+    ConfigModule.forRoot({ isGlobal: true }),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
@@ -49,7 +22,7 @@ import { AppService } from './app.service';
           type: 'topic',
         },
       ],
-      uri: 'amqps://bliusjly:ENcnqlBpupcKWGyas1YwhbdATaVnZz1g@hornet.rmq.cloudamqp.com/bliusjly',
+      uri: process.env.RABBITMQ_URI,
     }),
     AppModule,
   ],

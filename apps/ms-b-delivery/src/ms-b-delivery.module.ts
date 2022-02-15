@@ -1,10 +1,12 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MsBDeliveryController } from './ms-b-delivery.controller';
 import { MsBDeliveryService } from './ms-b-delivery.service';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
@@ -12,7 +14,7 @@ import { MsBDeliveryService } from './ms-b-delivery.service';
           type: 'topic',
         },
       ],
-      uri: 'amqps://bliusjly:ENcnqlBpupcKWGyas1YwhbdATaVnZz1g@hornet.rmq.cloudamqp.com/bliusjly',
+      uri: process.env.RABBITMQ_URI,
     }),
     MsBDeliveryModule,
   ],
